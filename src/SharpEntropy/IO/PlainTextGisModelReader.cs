@@ -77,10 +77,18 @@ namespace SharpEntropy.IO
 		/// </param>
 		public PlainTextGisModelReader(string fileName)
 		{
-			using (mInput = new StreamReader(fileName, System.Text.Encoding.UTF7))
-			{
+#if DNF
+		    using (mInput = new StreamReader(fileName, System.Text.Encoding.UTF7))
+#else
+			using (var stream = new FileStream(fileName, FileMode.Open))
+            using (mInput = new StreamReader(stream, System.Text.Encoding.UTF7))			
+#endif
+		    {
 				base.ReadModel();
 			}
+				
+            
+			
 		}
 
 		/// <summary>

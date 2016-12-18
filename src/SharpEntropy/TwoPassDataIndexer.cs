@@ -132,36 +132,40 @@ namespace SharpEntropy
             var counter = new Dictionary<string, int>();
 			int predicateIndex = 0;
 			int eventCount = 0;
-
-			using (var eventStoreWriter = new StreamWriter(eventStoreFile))
-			{
-				while (eventReader.HasNext())
-				{
-					TrainingEvent currentTrainingEvent = eventReader.ReadNextEvent();
-					eventCount++;
-					eventStoreWriter.Write(FileEventReader.ToLine(currentTrainingEvent));
-					string[] eventContext = currentTrainingEvent.Context;
-					for (int currentPredicate = 0; currentPredicate < eventContext.Length; currentPredicate++)
-					{
-						if (!predicatesInOut.ContainsKey(eventContext[currentPredicate]))
-						{
-							if (counter.ContainsKey(eventContext[currentPredicate]))
-							{
-								counter[eventContext[currentPredicate]]++;
-							}
-							else
-							{
-								counter.Add(eventContext[currentPredicate], 1);
-							}
-							if (counter[eventContext[currentPredicate]] >= cutoff)
-							{
-								predicatesInOut.Add(eventContext[currentPredicate], predicateIndex++);
-								counter.Remove(eventContext[currentPredicate]);
-							}
-						}
-					}
-				}
-			}
+#if DNF
+            using (var eventStoreWriter = new StreamWriter(eventStoreFile))
+#else
+            using (var stream = new FileStream(eventStoreFile, FileMode.Open))
+            using (var eventStoreWriter = new StreamWriter(stream))
+#endif
+            {
+                while (eventReader.HasNext())
+                {
+                    TrainingEvent currentTrainingEvent = eventReader.ReadNextEvent();
+                    eventCount++;
+                    eventStoreWriter.Write(FileEventReader.ToLine(currentTrainingEvent));
+                    string[] eventContext = currentTrainingEvent.Context;
+                    for (int currentPredicate = 0; currentPredicate < eventContext.Length; currentPredicate++)
+                    {
+                        if (!predicatesInOut.ContainsKey(eventContext[currentPredicate]))
+                        {
+                            if (counter.ContainsKey(eventContext[currentPredicate]))
+                            {
+                                counter[eventContext[currentPredicate]]++;
+                            }
+                            else
+                            {
+                                counter.Add(eventContext[currentPredicate], 1);
+                            }
+                            if (counter[eventContext[currentPredicate]] >= cutoff)
+                            {
+                                predicatesInOut.Add(eventContext[currentPredicate], predicateIndex++);
+                                counter.Remove(eventContext[currentPredicate]);
+                            }
+                        }
+                    }
+                }
+            }
 			return eventCount;
 		}
 
@@ -227,7 +231,8 @@ namespace SharpEntropy
 
 		public FileEventReader(string fileName)
 		{
-			mReader = new StreamReader(fileName, Encoding.UTF7);
+		    var stream = new FileStream(fileName, FileMode.Open);
+                mReader = new StreamReader(stream, Encoding.UTF7);
 			mWhitespace = new char[] {'\t', '\n', '\r', ' '};
 		}
 		
@@ -270,7 +275,7 @@ namespace SharpEntropy
 		{
 			if (disposing) 
 			{
-				mReader.Close();
+				mReader.Dispose();
 			}
 		}
 

@@ -72,7 +72,11 @@ namespace SharpEntropy.IO
 		/// </param>
 		public void Persist(GisModel model, string fileName)
 		{
-            using (mOutput = new StreamWriter(fileName, false, System.Text.Encoding.UTF7))
+#if DNF
+			using (mOutput = new StreamWriter(fileName, false, System.Text.Encoding.UTF7))
+#else
+			using (var stream = new FileStream(fileName, FileMode.Create))
+#endif
 			{
 				base.Persist(model);
 			}
