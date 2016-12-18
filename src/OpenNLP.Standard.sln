@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2C3A37FC-26BC-444F-8A04-F0C643B360FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4687DA46-8A65-47C7-80F1-C5F1F0500AB5}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ConsoleTest", "ConsoleTest\ConsoleTest.xproj", "{EF79C662-59AB-4554-BE73-0CFB39A4327F}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "OpenNLP", "OpenNLP\OpenNLP.xproj", "{74471CE9-9D9C-4459-841A-AF4F270991D4}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SharpEntropy", "SharpEntropy\SharpEntropy.xproj", "{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SharpWordNet", "SharpWordNet\SharpWordNet.xproj", "{9C9AAD9B-3192-4FF2-A139-E0FD42725F93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF79C662-59AB-4554-BE73-0CFB39A4327F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF79C662-59AB-4554-BE73-0CFB39A4327F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF79C662-59AB-4554-BE73-0CFB39A4327F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF79C662-59AB-4554-BE73-0CFB39A4327F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74471CE9-9D9C-4459-841A-AF4F270991D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74471CE9-9D9C-4459-841A-AF4F270991D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74471CE9-9D9C-4459-841A-AF4F270991D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74471CE9-9D9C-4459-841A-AF4F270991D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C9AAD9B-3192-4FF2-A139-E0FD42725F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C9AAD9B-3192-4FF2-A139-E0FD42725F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C9AAD9B-3192-4FF2-A139-E0FD42725F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C9AAD9B-3192-4FF2-A139-E0FD42725F93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF79C662-59AB-4554-BE73-0CFB39A4327F} = {2C3A37FC-26BC-444F-8A04-F0C643B360FB}
+		{74471CE9-9D9C-4459-841A-AF4F270991D4} = {2C3A37FC-26BC-444F-8A04-F0C643B360FB}
+		{FFFF3D5E-E7FA-4903-8986-5FB2484FEED6} = {2C3A37FC-26BC-444F-8A04-F0C643B360FB}
+		{9C9AAD9B-3192-4FF2-A139-E0FD42725F93} = {2C3A37FC-26BC-444F-8A04-F0C643B360FB}
+	EndGlobalSection
+EndGlobal
