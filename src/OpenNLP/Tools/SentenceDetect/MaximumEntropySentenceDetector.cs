@@ -260,8 +260,11 @@ namespace OpenNLP.Tools.SentenceDetect
         public static GisModel TrainModel(IEnumerable<string> filePaths, int iterations, int cut, IEndOfSentenceScanner scanner)
         {
             var trainer = new GisTrainer();
-
+#if DNF
             var readers = filePaths.Select(path => new StreamReader(path)).ToList();
+#else
+            var readers = filePaths.Select(path => new StreamReader(new FileStream(path, FileMode.OpenOrCreate))).ToList();
+#endif
 
             // train the model
             ITrainingDataReader<string> dataReader = new MultipleFilesPlainTextByLineDataReader(readers);

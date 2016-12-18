@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OpenNLP.Tools.Coreference.Resolver
 {
@@ -120,13 +121,21 @@ namespace OpenNLP.Tools.Coreference.Resolver
 
 				if (mDebugOn)
 				{
-					var writer = new System.IO.StreamWriter(mModelName + ".events", false, System.Text.Encoding.Default);
-					foreach (SharpEntropy.TrainingEvent trainingEvent in mEvents)
+#if DNF
+                    var writer = new System.IO.StreamWriter(mModelName + ".events", false, System.Text.Encoding.Default);
+#else
+                    var writer = new StreamWriter(new FileStream(mModelName + ".events", FileMode.Open));
+#endif
+                    foreach (SharpEntropy.TrainingEvent trainingEvent in mEvents)
 					{
 						writer.Write(trainingEvent.ToString() + "\n");
 					}
-					writer.Close();
-				}
+#if DNF
+                    writer.Close();
+#else
+                    writer.Dispose();
+#endif
+                }
 
                 var trainer = new SharpEntropy.GisTrainer();
                 trainer.TrainModel(new Util.CollectionEventReader(mEvents), 100, 10);

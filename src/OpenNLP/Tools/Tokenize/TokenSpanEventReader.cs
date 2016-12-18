@@ -99,8 +99,12 @@ namespace OpenNLP.Tools.Tokenize
 							}
 							else
 							{
-								throw new ApplicationException("Bad training token: " + tokens[currentToken] + " cand: " + candidateSpan);
-							}
+#if DNF
+                                throw new ApplicationException("Bad training token: " + tokens[currentToken] + " cand: " + candidateSpan);
+#else
+                                throw new Exception("Bad training token: " + tokens[currentToken] + " cand: " + candidateSpan);
+#endif
+                            }
 						}
 						// create training data
 						if (foundTrainingTokens)

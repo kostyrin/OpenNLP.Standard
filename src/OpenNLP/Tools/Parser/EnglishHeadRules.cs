@@ -150,8 +150,13 @@ namespace OpenNLP.Tools.Parser
 		
 		private void ReadHeadRules(string file)
 		{
-			using (var headRulesStreamReader = new StreamReader(file, System.Text.Encoding.UTF7))
-			{
+#if DNF
+            using (var headRulesStreamReader = new StreamReader(file, System.Text.Encoding.UTF7))
+#else
+            using (var stream = new FileStream(file, FileMode.OpenOrCreate))
+            using (var headRulesStreamReader = new StreamReader(stream, System.Text.Encoding.UTF7))
+#endif
+            {
 				string line = headRulesStreamReader.ReadLine();
                 mHeadRules = new Dictionary<string, HeadRule>(30);
 			

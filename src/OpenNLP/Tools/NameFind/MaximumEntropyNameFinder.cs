@@ -35,6 +35,7 @@
 
 using System;
 using System.Collections;
+using System.IO;
 using OpenNLP.Tools.Util;
 
 namespace OpenNLP.Tools.NameFind
@@ -176,8 +177,15 @@ namespace OpenNLP.Tools.NameFind
 
 		public static SharpEntropy.GisModel TrainModel(string trainingFile, int iterations, int cutoff)
 		{
-			SharpEntropy.ITrainingEventReader eventReader = new NameFinderEventReader(new SharpEntropy.PlainTextByLineDataReader(new System.IO.StreamReader(trainingFile)));
-			return Train(eventReader, iterations, cutoff);
+#if DNF
+            SharpEntropy.ITrainingEventReader eventReader = new NameFinderEventReader(new SharpEntropy.PlainTextByLineDataReader(new System.IO.StreamReader(trainingFile)));
+#else
+		    SharpEntropy.ITrainingEventReader eventReader =
+		        new NameFinderEventReader(
+		            new SharpEntropy.PlainTextByLineDataReader(
+		                new System.IO.StreamReader(new FileStream(trainingFile, FileMode.OpenOrCreate))));
+#endif
+            return Train(eventReader, iterations, cutoff);
 		}
 
 

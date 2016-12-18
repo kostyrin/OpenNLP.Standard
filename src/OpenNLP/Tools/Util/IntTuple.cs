@@ -16,7 +16,9 @@ namespace OpenNLP.Tools.Util
     /// 
     /// Code ...
     /// </summary>
-    [Serializable]
+#if DNF
+        [Serializable] 
+#endif
     public class IntTuple : IComparable<IntTuple>
     {
         protected readonly int[] elements;

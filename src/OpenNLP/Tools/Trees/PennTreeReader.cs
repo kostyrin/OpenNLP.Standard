@@ -265,7 +265,11 @@ namespace OpenNLP.Tools.Trees
         /// </summary>
         public void Close()
         {
+#if DNF
             reader.Close();
+#else
+            reader.Dispose();
+#endif
         }
 
     }

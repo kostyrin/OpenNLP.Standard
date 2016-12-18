@@ -36,7 +36,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+#if DNF
 using System.Runtime.Caching;
+#else
+using Microsoft.Extensions.Caching.Memory;
+#endif
 
 namespace OpenNLP.Tools.Parser
 {
@@ -50,7 +54,8 @@ namespace OpenNLP.Tools.Parser
 	    private readonly MemoryCache contextsCache;
 
 		public ChunkContextGenerator() : this(0){}
-  
+
+#if DNF
 		public ChunkContextGenerator(int cacheSizeInMegaBytes) : base()
 		{
 			if (cacheSizeInMegaBytes > 0) 
@@ -62,8 +67,17 @@ namespace OpenNLP.Tools.Parser
 			    contextsCache = new MemoryCache("chunkContextCache", properties);
 			}
 		}
+#else
+        public ChunkContextGenerator(int cacheSizeInMegaBytes) : base()
+        {
+            if (cacheSizeInMegaBytes > 0)
+            {
+                contextsCache = new MemoryCache(new MemoryCacheOptions());
+            }
+        }
+#endif
 
-		public virtual string[] GetContext(object input)
+        public virtual string[] GetContext(object input)
 		{
 			var data = (object[]) input;
 			return (GetContext(((int) data[0]), (string[]) data[1], (string[]) data[2], (string[]) data[3]));
@@ -170,8 +184,12 @@ namespace OpenNLP.Tools.Parser
 
 			if (contextsCache != null) 
 			{
-				contexts = (string[]) contextsCache[cacheKey];
-				if (contexts != null) 
+#if DNF
+                contexts = (string[]) contextsCache[cacheKey];
+#else
+			    contextsCache.TryGetValue(cacheKey, out contexts);
+#endif
+                if (contexts != null) 
 				{
 					return contexts;
 				}
@@ -215,7 +233,11 @@ namespace OpenNLP.Tools.Parser
 			contexts = features.ToArray();
 			if (contextsCache != null)
 			{
-				contextsCache[cacheKey] = contexts;
+#if DNF
+                contextsCache[cacheKey] = contexts;
+#else
+			    contextsCache.Set(cacheKey, contexts);
+#endif
 			}
 			return contexts;
 		}

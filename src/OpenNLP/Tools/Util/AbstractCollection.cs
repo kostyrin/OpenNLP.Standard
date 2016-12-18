@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if DNF
 using System.ComponentModel.DataAnnotations;
+#endif
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;

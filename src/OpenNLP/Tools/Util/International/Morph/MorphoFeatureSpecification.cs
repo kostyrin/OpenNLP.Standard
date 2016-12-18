@@ -98,11 +98,17 @@ namespace OpenNLP.Tools.Util.International.Morph
         {
             using (var writer = new StringWriter())
             {
+#if DNF
                 using (var provider = CodeDomProvider.CreateProvider("CSharp"))
                 {
                     provider.GenerateCodeFromExpression(new CodePrimitiveExpression(input), writer, null);
                     return writer.ToString();
                 }
+#else
+                //TODO
+                return string.Empty;
+#endif
+
             }
         }
     }

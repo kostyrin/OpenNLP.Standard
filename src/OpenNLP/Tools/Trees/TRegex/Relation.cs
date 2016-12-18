@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.SqlServer.Server;
+#if DNF
+using Microsoft.SqlServer.Server;    
+#endif
+
 using OpenNLP.Tools.Util;
 
 namespace OpenNLP.Tools.Trees.TRegex

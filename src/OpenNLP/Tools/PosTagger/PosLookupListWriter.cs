@@ -111,8 +111,13 @@ namespace OpenNLP.Tools.PosTagger
 		/// </param>
 		public virtual void Write(int cutoff)
 		{
-			using (StreamWriter writer = new StreamWriter(mDictionaryFile))
-			{
+#if DNF
+            using (StreamWriter writer = new StreamWriter(mDictionaryFile))
+#else
+		    using (var stream = new FileStream(mDictionaryFile, FileMode.OpenOrCreate))
+		    using (StreamWriter writer = new StreamWriter(stream))
+#endif
+            {
                 foreach (string word in mDictionary.Keys)
                 {
                     if (mWordCounts[word] > cutoff)
@@ -127,8 +132,12 @@ namespace OpenNLP.Tools.PosTagger
                         writer.Write(System.Environment.NewLine);
                     }
                 }
-				writer.Close();
-			}
+#if DNF
+                writer.Close();
+#else
+                writer.Dispose();
+#endif
+            }
 		}
 	}
 }

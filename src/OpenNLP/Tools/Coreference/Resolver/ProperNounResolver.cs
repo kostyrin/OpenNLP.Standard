@@ -85,21 +85,28 @@ namespace OpenNLP.Tools.Coreference.Resolver
 			try
 			{
 				StreamReader str;
-				//if (MaxentResolver.loadAsResource())
-				//{
-					//UPGRADE_TODO: The differences in the expected value  of parameters for constructor 'java.io.BufferedReader.BufferedReader'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
-					//UPGRADE_WARNING: At least one expression was used more than once in the target code. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1181'"
-					//UPGRADE_ISSUE: Method 'java.lang.Class.getResourceAsStream' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javalangClassgetResourceAsStream_javalangString'"
-					//str = new System.IO.StreamReader(new System.IO.StreamReader(this.GetType().getResourceAsStream(name), System.Text.Encoding.Default).BaseStream, new System.IO.StreamReader(this.GetType().getResourceAsStream(name), System.Text.Encoding.Default).CurrentEncoding);
-				//}
-				//else
-				//{
-					//UPGRADE_TODO: The differences in the expected value  of parameters for constructor 'java.io.BufferedReader.BufferedReader'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
-					//UPGRADE_WARNING: At least one expression was used more than once in the target code. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1181'"
-					//UPGRADE_TODO: Constructor 'java.io.FileReader.FileReader' was converted to 'System.IO.StreamReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073'"
-					str = new StreamReader(new StreamReader(name, Encoding.Default).BaseStream, new StreamReader(name, Encoding.Default).CurrentEncoding);
-				//}
-				string line;
+                //if (MaxentResolver.loadAsResource())
+                //{
+                //UPGRADE_TODO: The differences in the expected value  of parameters for constructor 'java.io.BufferedReader.BufferedReader'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
+                //UPGRADE_WARNING: At least one expression was used more than once in the target code. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1181'"
+                //UPGRADE_ISSUE: Method 'java.lang.Class.getResourceAsStream' was not converted. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1000_javalangClassgetResourceAsStream_javalangString'"
+                //str = new System.IO.StreamReader(new System.IO.StreamReader(this.GetType().getResourceAsStream(name), System.Text.Encoding.Default).BaseStream, new System.IO.StreamReader(this.GetType().getResourceAsStream(name), System.Text.Encoding.Default).CurrentEncoding);
+                //}
+                //else
+                //{
+                //UPGRADE_TODO: The differences in the expected value  of parameters for constructor 'java.io.BufferedReader.BufferedReader'  may cause compilation errors.  "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1092'"
+                //UPGRADE_WARNING: At least one expression was used more than once in the target code. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1181'"
+                //UPGRADE_TODO: Constructor 'java.io.FileReader.FileReader' was converted to 'System.IO.StreamReader' which has a different behavior. "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1073'"
+#if DNF
+                str = new StreamReader(new StreamReader(name, Encoding.Default).BaseStream, new StreamReader(name, Encoding.Default).CurrentEncoding);
+#else
+			    str =
+			        new StreamReader(
+			            new StreamReader(new FileStream(name, FileMode.OpenOrCreate), Encoding.GetEncoding(0)).BaseStream,
+			            new StreamReader(new FileStream(name, FileMode.OpenOrCreate), Encoding.GetEncoding(0)).CurrentEncoding);
+#endif
+                //}
+                string line;
 				while (null != (line = str.ReadLine()))
 				{
 					var st = new Util.StringTokenizer(line, "\t");

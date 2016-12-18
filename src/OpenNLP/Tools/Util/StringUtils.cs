@@ -49,7 +49,11 @@ namespace OpenNLP.Tools.Util
         {
             foreach (string squote in c)
             {
+#if DNF
                 if (squote.Equals(s, StringComparison.InvariantCultureIgnoreCase))
+#else
+                if (squote.Equals(s, StringComparison.OrdinalIgnoreCase))
+#endif
                     return true;
             }
             return false;
@@ -287,7 +291,7 @@ namespace OpenNLP.Tools.Util
    * It assumes all whitespace was " "
    * @param tokens list of tokens which implement {@link HasOffset} and {@link HasWord}
    * @return a string of the tokens with the appropriate amount of spacing
-   #1#
+#1#
   public static string joinWithOriginalWhiteSpace(List<CoreLabel> tokens) {
     if (tokens.isEmpty()) {
       return "";
@@ -314,7 +318,7 @@ namespace OpenNLP.Tools.Util
    * Joins each elem in the {@code Collection} with the given glue.
    * For example, given a list of {@code Integers}, you can create
    * a comma-separated list by calling {@code join(numbers, ", ")}.
-   #1#
+#1#
   public static <X> string join(Iterable<X> l, string glue) {
     StringBuilder sb = new StringBuilder();
     bool first = true;
@@ -351,21 +355,21 @@ namespace OpenNLP.Tools.Util
    * Joins each elem in the array with the given glue. For example, given a
    * list of ints, you can create a comma-separated list by calling
    * <code>join(numbers, ", ")</code>.
-   #1#
+#1#
   public static string join(Object[] elements, string glue) {
     return (join(Arrays.asList(elements), glue));
   }
 
   /**
    * Joins elems with a space.
-   #1#
+#1#
   public static string join(Iterable<?> l) {
     return join(l, " ");
   }
 
   /**
    * Joins elements with a space.
-   #1#
+#1#
   public static string join(Object[] elements) {
     return (join(elements, " "));
   }*/
@@ -423,7 +427,7 @@ namespace OpenNLP.Tools.Util
    *
    * @param delimiter
    * @return
-   #1#
+#1#
   public static List<List<string>> splitFieldsFast(string str, string delimiter) {
     List<List<string>> fields = Generics.newArrayList();
     StringTokenizer tokenizer = new StringTokenizer(str.Trim());
@@ -460,7 +464,7 @@ namespace OpenNLP.Tools.Util
    *  @param separatorRegex Must match a separator
    *  @return The List of tokens
    *  @throws IllegalArgumentException if str cannot be tokenized by the two regex
-   #1#
+#1#
   public static List<string> valueSplit(string str, string valueRegex, string separatorRegex) {
     Pattern vPat = Pattern.compile(valueRegex);
     Pattern sPat = Pattern.compile(separatorRegex);

@@ -131,7 +131,11 @@ namespace OpenNLP.Tools.Trees.TRegex
                 //if ((i = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd)) == -1)
                 if ((i = inputStream.Read(buffer, maxNextCharInd, available - maxNextCharInd)) == 0)
                 {
+#if DNF
                     inputStream.Close();
+#else
+                    inputStream.Dispose();
+#endif
                     throw new IOException();
                 }
                 else

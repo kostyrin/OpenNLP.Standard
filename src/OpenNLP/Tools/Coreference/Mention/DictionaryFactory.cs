@@ -34,7 +34,9 @@
 //Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 using System;
+#if DNF
 using System.Configuration;
+#endif
 
 namespace OpenNLP.Tools.Coreference.Mention
 {
@@ -64,7 +66,11 @@ namespace OpenNLP.Tools.Coreference.Mention
 
         public static IDictionary GetDictionary()
         {
+#if DNF
             return GetDictionary(ConfigurationManager.AppSettings["WordnetSearchDirectory"]);
+#else
+            return GetDictionary(@"Resources\WordNet\dict\");
+#endif
         }
 
 		private static IDictionary mDictionary;

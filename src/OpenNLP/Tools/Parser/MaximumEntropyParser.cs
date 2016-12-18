@@ -676,8 +676,15 @@ namespace OpenNLP.Tools.Parser
 		public static SharpEntropy.GisModel TrainModel(string trainingFile, EventType modelType, string headRulesFile, int iterations, int cutoff)
 		{
 			var rules = new EnglishHeadRules(headRulesFile);
-			SharpEntropy.ITrainingEventReader eventReader = new ParserEventReader(new SharpEntropy.PlainTextByLineDataReader(new StreamReader(trainingFile)), rules, modelType);
-			return Train(eventReader, iterations, cutoff);
+#if DNF
+            SharpEntropy.ITrainingEventReader eventReader = new ParserEventReader(new SharpEntropy.PlainTextByLineDataReader(new StreamReader(trainingFile)), rules, modelType);
+#else
+		    SharpEntropy.ITrainingEventReader eventReader =
+		        new ParserEventReader(
+		            new SharpEntropy.PlainTextByLineDataReader(
+		                new StreamReader(new FileStream(trainingFile, FileMode.OpenOrCreate))), rules, modelType);
+#endif
+            return Train(eventReader, iterations, cutoff);
 		}
 	}
 }

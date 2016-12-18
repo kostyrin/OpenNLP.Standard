@@ -38,10 +38,12 @@ using System.Collections.Generic;
 
 namespace OpenNLP.Tools.Util
 {
-	/// <summary>
+    /// <summary>
     /// Class which creates mapping between keys and a list of values.
     /// </summary>
-    [Serializable]
+#if DNF 
+        [Serializable] 
+#endif
     public class HashList<TKey, TValue> : Dictionary<TKey, List<TValue>>
 	{
 		public virtual TValue GetValue(TKey key, int index)

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if DNF
 using System.Runtime.Serialization;
+#endif
 using System.Text;
 using System.Threading.Tasks;
 using OpenNLP.Tools.Ling;

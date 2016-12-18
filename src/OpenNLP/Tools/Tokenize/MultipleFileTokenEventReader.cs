@@ -35,7 +35,9 @@
 
 using System;
 using System.Collections.Generic;
+#if DNF
 using System.ComponentModel.DataAnnotations;
+#endif
 using System.IO;
 using System.Linq;
 

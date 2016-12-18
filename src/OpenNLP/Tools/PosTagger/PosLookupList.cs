@@ -35,6 +35,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OpenNLP.Tools.PosTagger
 {
@@ -49,30 +50,36 @@ namespace OpenNLP.Tools.PosTagger
 		public PosLookupList(string file) : this(file, true)
 		{
 		}
-		
-		/// <summary>
-		/// Create tag dictionary object with contents of specified file and using specified case to determine how to access entries in the tag dictionary.
-		/// </summary>
-		/// <param name="file">
-		/// The file name for the tag dictionary.
-		/// </param>
-		/// <param name="caseSensitive">
-		/// Specifies whether the tag dictionary is case sensitive or not.
-		/// </param>
+
+        /// <summary>
+        /// Create tag dictionary object with contents of specified file and using specified case to determine how to access entries in the tag dictionary.
+        /// </summary>
+        /// <param name="file">
+        /// The file name for the tag dictionary.
+        /// </param>
+        /// <param name="caseSensitive">
+        /// Specifies whether the tag dictionary is case sensitive or not.
+        /// </param>
+#if DNF
 		public PosLookupList(string file, bool caseSensitive) : this(new System.IO.StreamReader(file, System.Text.Encoding.UTF7), caseSensitive)
 		{
 		}
-		
-		/// <summary>
-		/// Create tag dictionary object with contents of specified file and using specified case to determine how to access entries in the tag dictionary.
-		/// </summary>
-		/// <param name="reader">
-		/// A reader for the tag dictionary.
-		/// </param>
-		/// <param name="caseSensitive">
-		/// Specifies whether the tag dictionary is case sensitive or not.
-		/// </param>
-		public PosLookupList(System.IO.StreamReader reader, bool caseSensitive)
+#else
+        public PosLookupList(string file, bool caseSensitive) : this(new System.IO.StreamReader(new FileStream(file, FileMode.OpenOrCreate), System.Text.Encoding.UTF7), caseSensitive)
+        {
+        }
+#endif
+
+        /// <summary>
+        /// Create tag dictionary object with contents of specified file and using specified case to determine how to access entries in the tag dictionary.
+        /// </summary>
+        /// <param name="reader">
+        /// A reader for the tag dictionary.
+        /// </param>
+        /// <param name="caseSensitive">
+        /// Specifies whether the tag dictionary is case sensitive or not.
+        /// </param>
+        public PosLookupList(System.IO.StreamReader reader, bool caseSensitive)
 		{
             mDictionary = new Dictionary<string, string[]>();
 			mIsCaseSensitive = caseSensitive;
@@ -100,7 +107,12 @@ namespace OpenNLP.Tools.PosTagger
 		{
 			if (!mIsCaseSensitive)
 			{
-                word = word.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+#if DNF
+			    word = word.ToLower(System.Globalization.CultureInfo.InvariantCulture); 
+#else
+                word = word.ToLower();
+#endif
+
             }
 
             if (mDictionary.ContainsKey(word))

@@ -274,8 +274,12 @@ namespace OpenNLP.Tools.PosTagger
 		/// <returns>Trained GIS model</returns>
 		public static SharpEntropy.GisModel TrainModel(string trainingFile, int iterations, int cutoff)
 		{
-			SharpEntropy.ITrainingEventReader eventReader = new PosEventReader(new StreamReader(trainingFile));
-			return Train(eventReader, iterations, cutoff);
+#if DNF
+            SharpEntropy.ITrainingEventReader eventReader = new PosEventReader(new StreamReader(trainingFile));
+#else
+            SharpEntropy.ITrainingEventReader eventReader = new PosEventReader(new StreamReader(new FileStream(trainingFile, FileMode.OpenOrCreate)));
+#endif
+            return Train(eventReader, iterations, cutoff);
 		}
 
 

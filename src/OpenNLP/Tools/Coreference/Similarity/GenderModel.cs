@@ -193,12 +193,22 @@ namespace OpenNLP.Tools.Coreference.Similarity
         {
             if (mDebugOn)
             {
+#if DNF
                 StreamWriter writer = new StreamWriter(mModelName + ".events", false, System.Text.Encoding.Default);
-               foreach (SharpEntropy.TrainingEvent currentEvent in mEvents)
+#else
+                var stream = new FileStream(mModelName + ".events", FileMode.OpenOrCreate);
+                StreamWriter writer = new StreamWriter(stream, System.Text.Encoding.GetEncoding(0));
+#endif
+                foreach (SharpEntropy.TrainingEvent currentEvent in mEvents)
                 {
                     writer.Write(currentEvent.ToString() + "\n");
                 }
+#if DNF
                 writer.Close();
+#else
+                writer.Dispose();
+                stream.Dispose();
+#endif
             }
 
             SharpEntropy.GisTrainer trainer = new SharpEntropy.GisTrainer();
@@ -207,7 +217,7 @@ namespace OpenNLP.Tools.Coreference.Similarity
             new SharpEntropy.IO.BinaryGisModelWriter().Persist(new SharpEntropy.GisModel(trainer), mModelName + mModelExtension);
         }
 
-        #endregion
+#endregion
 
 		public static ITestGenderModel TestModel(string name)
 		{
@@ -224,9 +234,13 @@ namespace OpenNLP.Tools.Coreference.Similarity
         private Util.Set<string> ReadNames(string nameFile)
 		{
 			Util.Set<string> names = new Util.HashSet<string>();
-			
+#if DNF
             var nameReader = new StreamReader(nameFile, System.Text.Encoding.Default);
-			for (string line = nameReader.ReadLine(); line != null; line = nameReader.ReadLine())
+#else
+            var stream = new FileStream(nameFile, FileMode.OpenOrCreate);
+            var nameReader = new StreamReader(stream, System.Text.Encoding.GetEncoding(0));
+#endif
+            for (string line = nameReader.ReadLine(); line != null; line = nameReader.ReadLine())
 			{
 				names.Add(line);
 			}

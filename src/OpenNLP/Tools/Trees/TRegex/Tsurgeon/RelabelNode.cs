@@ -220,7 +220,11 @@ namespace OpenNLP.Tools.Trees.TRegex.Tsurgeon
                     return label + '(' + children[0].ToString() + ',' + labelRegex.ToString() + ',' + replacementString +
                            ')';
                 default:
+#if DNF
                     throw new InvalidEnumArgumentException("Unsupported relabel mode " + mode);
+#else
+                    throw new ArgumentException("Unsupported relabel mode " + mode);
+#endif
             }
         }
     }

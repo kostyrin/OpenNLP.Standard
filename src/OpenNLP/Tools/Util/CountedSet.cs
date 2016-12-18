@@ -187,7 +187,13 @@ namespace OpenNLP.Tools.Util
 
         public virtual void Write(string fileName, int countCutoff, string delim)
         {
+#if DNF
             using (var streamWriter = new StreamWriter(fileName, false))
+#else
+            using (var stream = new FileStream(fileName, FileMode.OpenOrCreate))
+            using (var streamWriter = new StreamWriter(stream))
+#endif
+
             {
                 foreach (T key in mCountedSet.Keys)
                 {
@@ -203,7 +209,12 @@ namespace OpenNLP.Tools.Util
 
         public virtual void Write(string fileName, int countCutoff, string delim, System.Text.Encoding encoding)
         {
+#if DNF
             using (var streamWriter = new StreamWriter(fileName, false, encoding))
+#else
+            using (var file = new FileStream(fileName, FileMode.OpenOrCreate))
+            using (var streamWriter = new StreamWriter(file, encoding))
+#endif
             {
                 foreach (T key in mCountedSet.Keys)
                 {
@@ -217,25 +228,25 @@ namespace OpenNLP.Tools.Util
 
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable<T> Members
+#region IEnumerable<T> Members
 
         public IEnumerator<T> GetEnumerator()
         {
             return new List<T>(mCountedSet.Keys).GetEnumerator();
         }
 
-        #endregion
+#endregion
 
-        #region IEnumerable Members
+#region IEnumerable Members
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return new ArrayList((ICollection) mCountedSet.Keys).GetEnumerator();
         }
 
-        #endregion
+#endregion
 
         //public virtual System.Boolean AddAll(System.Collections.ICollection c)
         //{

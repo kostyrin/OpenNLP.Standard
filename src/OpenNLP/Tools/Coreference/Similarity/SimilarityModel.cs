@@ -35,6 +35,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace OpenNLP.Tools.Coreference.Similarity
@@ -421,13 +422,22 @@ namespace OpenNLP.Tools.Coreference.Similarity
 		{
 			if (DebugOn)
 			{
-				var writer = new System.IO.StreamWriter(ModelName + ".events", false, System.Text.Encoding.Default);
-				foreach (SharpEntropy.TrainingEvent trainingEvent in _events)
+#if DNF
+                var writer = new System.IO.StreamWriter(ModelName + ".events", false, System.Text.Encoding.Default);
+#else
+			    var writer = new System.IO.StreamWriter(new FileStream(ModelName + ".events", FileMode.OpenOrCreate),
+			        System.Text.Encoding.GetEncoding(0));
+#endif
+                foreach (SharpEntropy.TrainingEvent trainingEvent in _events)
                 {
 					writer.Write(trainingEvent + "\n");
 				}
-				writer.Close();
-			}
+#if DNF
+                writer.Close();
+#else
+                writer.Dispose();
+#endif
+            }
 
             var trainer = new SharpEntropy.GisTrainer();
             trainer.TrainModel(new Util.CollectionEventReader(_events), 100, 10);

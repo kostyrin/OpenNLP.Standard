@@ -170,10 +170,17 @@ namespace OpenNLP.Tools.Trees.TRegex
                         descPattern = null;
                         exactMatch = null;
                         //stringFilter = new ArrayStringFilter(ArrayStringFilter.Mode.CASE_INSENSITIVE, matchedGroup.Split(new []{"[|]"}, StringSplitOptions.None)); 
+#if DNF
                         stringFilter =
                             a =>
                                 matchedGroup.Split('|')
                                     .Any(s => s.Equals(a, StringComparison.InvariantCultureIgnoreCase));
+#else
+                        stringFilter =
+                            a =>
+                                matchedGroup.Split('|')
+                                    .Any(s => s.Equals(a, StringComparison.OrdinalIgnoreCase));
+#endif
                     }
                 }
                 else if (PrefixPattern.IsMatch(desc))

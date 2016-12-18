@@ -36,34 +36,48 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if DNF
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Runtime.Serialization;
+#endif
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Runtime.Serialization;
+
 
 namespace OpenNLP.Tools.Parser
 {
 
-	/// <summary>
-	/// Exception class for problems detected during parsing.
-	/// </summary>
+    /// <summary>
+    /// Exception class for problems detected during parsing.
+    /// </summary>
+#if DNF
 	[Serializable]
-	public class ParseException : ApplicationException
-	{
+    public class ParseException : ApplicationException
+#else
+    public class ParseException : Exception
+#endif
+
+    {
 		public ParseException(){}
 
 		public ParseException(string message) : base(message){}
 
 		public ParseException(string message, Exception innerException) : base(message, innerException){}
 
+#if DNF
 		protected ParseException(SerializationInfo info, StreamingContext context) : base(info, context){}
+#endif
 	}
 
-	/// <summary>
-	/// Class for holding constituents.
-	/// </summary>
+    /// <summary>
+    /// Class for holding constituents.
+    /// </summary>
+#if DNF
 	public class Parse : ICloneable, IComparable
-	{
+#else
+    public class Parse : IComparable
+#endif
+    {
 		/// <summary>
 		/// The sub-constituents of this parse.
 		/// </summary>

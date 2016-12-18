@@ -41,7 +41,9 @@ namespace OpenNLP.Tools.Trees
     /// 
     /// Code retrieved on the Stanford parser and ported to C# (see http://nlp.stanford.edu/software/lex-parser.shtml)
     /// </summary>
-    [Serializable]
+#if DNF
+        [Serializable] 
+#endif
     public /*abstract*/ class GrammaticalStructure
     {
         protected readonly List<TypedDependency> typedDependencies;
@@ -232,9 +234,11 @@ namespace OpenNLP.Tools.Trees
 
         private static void ThrowDepFormatException(string dep)
         {
-            throw new SystemException(
-                string.Format("Dependencies should be for the format 'type(arg-idx, arg-idx)'. Could not parse '{0}'",
-                    dep));
+#if DNF
+            throw new SystemException(string.Format("Dependencies should be for the format 'type(arg-idx, arg-idx)'. Could not parse '{0}'", dep));
+#else
+            throw new Exception(string.Format("Dependencies should be for the format 'type(arg-idx, arg-idx)'. Could not parse '{0}'", dep));
+#endif
         }
         
         /// <summary>
@@ -246,8 +250,11 @@ namespace OpenNLP.Tools.Trees
         {
             if (tokens.Count != posTags.Count)
             {
-                throw new SystemException(String.Format(
-                    "tokens.Count: {0} != pos.Count: {1}\n", tokens.Count, posTags.Count));
+#if DNF
+                throw new SystemException(String.Format("tokens.Count: {0} != pos.Count: {1}\n", tokens.Count, posTags.Count));
+#else
+                throw new Exception(String.Format("tokens.Count: {0} != pos.Count: {1}\n", tokens.Count, posTags.Count));
+#endif
             }
 
             var tgWordNodes = new List<TreeGraphNode>(tokens.Count);
@@ -377,7 +384,11 @@ namespace OpenNLP.Tools.Trees
                 }
                 else
                 {
+#if DNF
                     throw new SystemException("Should never be here.");
+#else
+                    throw new Exception("Should never be here.");
+#endif
                 }
             }
             foreach (TreeGraphNode kid in t.Children())
@@ -469,7 +480,11 @@ namespace OpenNLP.Tools.Trees
                     }
                     else
                     {
+#if DNF
                         throw new SystemException("Should never be here");
+#else
+                        throw new Exception("Should never be here");
+#endif
                     }
                 }
             }
@@ -1527,7 +1542,7 @@ namespace OpenNLP.Tools.Trees
    * command-line option "basicDependencies".
    *
    * @return The typed dependencies of this grammatical structure
-   #1#
+#1#
         public List<TypedDependency> typedDependencies()
         {
             return typedDependencies(false);
@@ -1539,7 +1554,7 @@ namespace OpenNLP.Tools.Trees
          * These are like the basic (uncollapsed) dependencies, but may include
          * extra arcs for control relationships, etc. This corresponds to the
          * "nonCollapsed" option.
-         #1#
+#1#
         public List<TypedDependency> allTypedDependencies()
         {
             return typedDependencies(true);
@@ -1553,7 +1568,7 @@ namespace OpenNLP.Tools.Trees
          * @param includeExtras If true, the list of typed dependencies
          * returned may include "extras", and does not follow a tree structure.
          * @return The typed dependencies of this grammatical structure
-         #1#
+#1#
         public List<TypedDependency> typedDependencies(bool includeExtras)
         {
             // This copy has to be done because of the broken way
@@ -1589,7 +1604,7 @@ namespace OpenNLP.Tools.Trees
          * not only re-entrancies but even small cycles.
          *
          * @return A set of collapsed dependencies
-         #1#
+#1#
         public List<TypedDependency> typedDependenciesCollapsed()
         {
             return typedDependenciesCollapsed(false);
@@ -1609,7 +1624,7 @@ namespace OpenNLP.Tools.Trees
          * This corresponds to the "tree" option.
          *
          * @return collapsed dependencies keeping a tree structure
-         #1#
+#1#
         public List<TypedDependency> typedDependenciesCollapsedTree()
         {
             List<TypedDependency> tdl = typedDependencies(false);
@@ -1625,7 +1640,7 @@ namespace OpenNLP.Tools.Trees
          * @param includeExtras If true, the list of typed dependencies
          * returned may include "extras", like controlling subjects
          * @return collapsed dependencies
-         #1#
+#1#
         public List<TypedDependency> typedDependenciesCollapsed(bool includeExtras)
         {
             List<TypedDependency> tdl = typedDependencies(includeExtras);
@@ -1646,7 +1661,7 @@ namespace OpenNLP.Tools.Trees
          * @param includeExtras If true, the list of typed dependencies
          * returned may include "extras", such as controlled subject links.
          * @return collapsed dependencies with CC processed
-         #1#
+#1#
         public List<TypedDependency> typedDependenciesCCprocessed(bool includeExtras)
         {
             List<TypedDependency> tdl = typedDependencies(includeExtras);
@@ -1665,7 +1680,7 @@ namespace OpenNLP.Tools.Trees
          * The "CCPropagated" option corresponds to calling this method.
          *
          * @return collapsed dependencies with CC processed
-         #1#
+#1#
         public List<TypedDependency> typedDependenciesCCprocessed()
         {
             return typedDependenciesCCprocessed(true);
@@ -1679,7 +1694,7 @@ namespace OpenNLP.Tools.Trees
   *
   * @param list A list of dependencies to process for possible collapsing
   * @param CCprocess apply CC process?
-  #1#
+#1#
         protected virtual void collapseDependencies(List<TypedDependency> list, bool CCprocess, bool includeExtras)
         {
             // do nothing as default operation
@@ -1693,7 +1708,7 @@ namespace OpenNLP.Tools.Trees
          *
          * @param list A list of dependencies to process for possible collapsing
          *
-         #1#
+#1#
         protected virtual void collapseDependenciesTree(List<TypedDependency> list)
         {
             // do nothing as default operation
@@ -1706,7 +1721,7 @@ namespace OpenNLP.Tools.Trees
          * <p/>
          * Default is no-op; to be over-ridden in subclasses.
          *
-         #1#
+#1#
         protected void correctDependencies(List<TypedDependency> list)
         {
             // do nothing as default operation

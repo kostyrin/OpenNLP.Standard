@@ -36,7 +36,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+#if DNF
 using System.Runtime.Caching;
+#else
+using Microsoft.Extensions.Caching.Memory;
+#endif
 using System.Text.RegularExpressions;
 
 namespace OpenNLP.Tools.PosTagger
@@ -60,7 +64,8 @@ namespace OpenNLP.Tools.PosTagger
         // Constructors ----------------------------------------
 
 		public DefaultPosContextGenerator() : this(0){}
-		
+
+#if DNF
 		public DefaultPosContextGenerator(int cacheSizeInMegaBytes) 
 		{
 			if (cacheSizeInMegaBytes > 0)
@@ -72,11 +77,20 @@ namespace OpenNLP.Tools.PosTagger
 			    memoryCache = new MemoryCache("posContextCache", properties);
 			}
 		}
+#else
+        public DefaultPosContextGenerator(int cacheSizeInMegaBytes)
+        {
+            if (cacheSizeInMegaBytes > 0)
+            {
+                memoryCache = new MemoryCache(new MemoryCacheOptions());
+            }
+        }
+#endif
 
 
         // Methods ---------------------------------------------
 
-		public virtual string[] GetContext(object input)
+        public virtual string[] GetContext(object input)
 		{
 			var data = (object[]) input;
 			return GetContext(((int) data[0]), (string[]) data[1], (string[]) data[2], null);
@@ -149,10 +163,15 @@ namespace OpenNLP.Tools.PosTagger
 			
 			string cacheKey = string.Format("{0}||{1}||{2}||{3}", index.ToString(System.Globalization.CultureInfo.InvariantCulture),
                 string.Join("|", tokens), tagPrevious, tagPreviousPrevious);
-			if (memoryCache != null) 
+			if (memoryCache != null)
 			{
-				var cachedContexts = (string[]) memoryCache[cacheKey];    
-				if (cachedContexts != null) 
+			    string[] cachedContexts;
+#if DNF
+				cachedContexts = (string[]) memoryCache[cacheKey];    
+#else
+			    memoryCache.TryGetValue(cacheKey, out cachedContexts);
+#endif
+                if (cachedContexts != null) 
 				{
 					return cachedContexts;
 				}
@@ -163,7 +182,11 @@ namespace OpenNLP.Tools.PosTagger
 			string[] contexts = eventList.ToArray();
 			if (memoryCache != null) 
 			{
+#if DNF
 				memoryCache[cacheKey] = contexts;
+#else
+			    memoryCache.Set(cacheKey, contexts);
+#endif
 			}
 			return contexts;
 		}

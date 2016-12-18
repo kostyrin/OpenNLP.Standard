@@ -37,6 +37,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.IO;
 using SharpEntropy.IO;
 
 namespace OpenNLP.Tools.Coreference.Resolver
@@ -422,13 +423,23 @@ namespace OpenNLP.Tools.Coreference.Resolver
 				if (DebugOn)
 				{
 					System.Console.Error.WriteLine(this.ToString() + " referential");
+#if DNF
                     using (var writer = new System.IO.StreamWriter(_modelName + ".events", false, System.Text.Encoding.Default))
+#else
+                    using (var stream = new FileStream(_modelName + ".events", FileMode.OpenOrCreate))
+                    using (var writer = new System.IO.StreamWriter(stream, System.Text.Encoding.GetEncoding(0)))
+#endif
                     {
                         foreach (SharpEntropy.TrainingEvent e in _events)
                         {
                             writer.Write(e.ToString() + "\n");
                         }
+#if DNF
                         writer.Close();
+#else
+                        writer.Dispose();
+                        stream.Dispose();
+#endif
                     }
 				}
 

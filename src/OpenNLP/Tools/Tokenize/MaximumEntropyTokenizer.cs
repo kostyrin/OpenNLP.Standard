@@ -163,7 +163,11 @@ namespace OpenNLP.Tools.Tokenize
             var dataReaders = new List<StreamReader>();
 	        foreach (var path in inputFilePaths)
 	        {
+#if DNF
                 var dataReader = new StreamReader(path);
+#else
+                var dataReader = new StreamReader(new FileStream(path, FileMode.Open));
+#endif
                 dataReaders.Add(dataReader);
 	        }
 
